@@ -1,12 +1,18 @@
 // App.jsx
 
-// Import your SplashScreen component
 import SplashScreen from "./SplashScreen"
+import Navbar from "./navBar"       // ← import your new Navbar
 
 function App() {
   return (
-    // Just render SplashScreen — it handles everything inside!
-    <SplashScreen />
+    <div>
+      <SplashScreen />
+
+      {/* Navbar shows below the splash screen */}
+      <Navbar />
+
+      {/* Rest of your portfolio will go here */}
+    </div>
   )
 }
 

@@ -24,7 +24,7 @@ export default function SplashScreen() {
       // React sees the change and re-renders the UI
       setShowSplash(false);
 
-    }, 3000); // ← 3000ms = 3 seconds
+    }, 1000); // ← 3000ms = 3 seconds
 
     // Cleanup: if the component is removed before 3s,
     // cancel the timer so nothing breaks
@@ -56,7 +56,7 @@ export default function SplashScreen() {
         {/* Your name — big and bold */}
         <h1 className="text-white font-bold text-8xl tracking-widest">
           {/* The first letter is green, rest are white */}
-          <span className="text-green-400">H</span>ARSHITA
+          <span className="text-green-400">H</span>ARSHITA SINGH
         </h1>
 
         {/* Green line under the name */}
@@ -64,7 +64,7 @@ export default function SplashScreen() {
 
         {/* Your role */}
         <p className="text-green-400 text-sm tracking-widest mt-4 font-mono">
-          Frontend Developer
+          Software Developer
         </p>
 
         {/* Progress bar at the bottom
