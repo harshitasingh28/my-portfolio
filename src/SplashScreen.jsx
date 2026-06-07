@@ -1,95 +1,126 @@
-// SplashScreen.jsx
-
-// useState  → lets us store data that can change
-// useEffect → lets us run code when the component loads
 import { useState, useEffect } from "react";
 
-// This is your component — just a function that returns JSX
-export default function SplashScreen() {
+export default function SplashScreen({ onFinish }) {
 
-  // showSplash = true  → splash screen is visible
-  // showSplash = false → home page is visible
-  // useState(true) means: start with showSplash = true
-  const [showSplash, setShowSplash] = useState(true);
+  // exiting = false → splash is sitting still on screen
+  // exiting = true  → splash starts sliding UP (exit animation)
+  const [exiting, setExiting] = useState(false);
 
-  // useEffect runs code AFTER the component appears on screen
-  // The [] at the end means: run this only ONCE (on first load)
+  // mounted = true  → splash is in the DOM (visible)
+  // mounted = false → splash is completely removed from DOM
+  const [mounted, setMounted] = useState(true);
+
+  // hovered = tracks if mouse is over the name
+  // true → text turns dark with white glow
+  // false → text stays white
+  const [hovered, setHovered] = useState(false);
+
   useEffect(() => {
 
-    // setTimeout waits 3000 milliseconds (= 3 seconds)
-    // then runs the function inside it
-    const timer = setTimeout(() => {
+    // After 1 second (1000ms), start the exit animation
+    const exitTimer = setTimeout(() => {
 
-      // This changes showSplash from true → false
-      // React sees the change and re-renders the UI
-      setShowSplash(false);
+      // Step 1: trigger the slide-up CSS transition
+      setExiting(true);
 
-    }, 1000); // ← 3000ms = 3 seconds
+      // Step 2: after the animation finishes (0.9s),
+      // remove from DOM and tell App.jsx we're done
+      setTimeout(() => {
+        setMounted(false);
+        onFinish();
+      }, 900);
 
-    // Cleanup: if the component is removed before 3s,
-    // cancel the timer so nothing breaks
-    return () => clearTimeout(timer);
+    }, 1000);
 
-  }, []); // ← empty array = run only once
+    // Cleanup: cancel timer if component unmounts early
+    return () => clearTimeout(exitTimer);
 
-  // ─── JSX: what gets shown on screen ───
+  }, []);
+
+  // If mounted is false, render nothing at all
+  if (!mounted) return null;
+
   return (
-    // The outer div takes up the full screen
-    // "relative" lets child elements use "absolute" positioning
-    <div className="relative min-h-screen bg-black overflow-hidden">
+    <>
+      {/* CSS styles — cursive font + hover effect */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
-      {/* SPLASH SCREEN
-          showSplash is true?  → show splash
-          showSplash is false? → hide splash (opacity-0 + pointer-events-none)
+        @keyframes fillBar {
+          from { width: 0% }
+          to   { width: 100% }
+        }
+      `}</style>
 
-          This is called a "conditional className" — we add or remove
-          classes based on state using a ternary: condition ? "yes" : "no"
+      {/*
+        OUTER WRAPPER
+        - fixed inset-0  → covers entire screen
+        - z-50           → sits above everything
+        - flex flex-col items-center justify-center → centers content
+        - transform      → changes based on exiting state
+          exiting = false → translateY(0)    → normal position
+          exiting = true  → translateY(-100%) → slides UP off screen
+        - transition     → smooth 0.9s animation when transform changes
       */}
-      <div className={`
-        absolute inset-0
-        flex flex-col items-center justify-center
-        bg-black z-10
-        transition-all duration-700
-        ${showSplash ? "opacity-100" : "opacity-0 pointer-events-none -translate-y-full"}
-      `}>
+      <div
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+        style={{
+          background: "#e8000d",
+          transform: exiting ? "translateY(-100%)" : "translateY(0)",
+          transition: "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1)",
+        }}
+      >
 
-        {/* Your name — big and bold */}
-        <h1 className="text-white font-bold text-8xl tracking-widest">
-          {/* The first letter is green, rest are white */}
-          <span className="text-green-400">H</span>ARSHITA SINGH
+        {/*
+          THE NAME
+          - Dancing Script = the cursive Google font
+          - onMouseEnter → fires when mouse moves ONTO the text
+          - onMouseLeave → fires when mouse moves OFF the text
+          - color changes based on hovered state
+          - text-shadow adds the white glow on hover
+        */}
+        <h1
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{
+            fontFamily: "'Dancing Script', cursive",
+            fontWeight: 700,
+            fontSize: "clamp(4rem, 12vw, 8rem)",
+            lineHeight: 1.1,
+            cursor: "default",
+            userSelect: "none",
+
+            // Color changes on hover
+            color: hovered ? "#111" : "#fff",
+
+            // Glow appears on hover, disappears off hover
+            textShadow: hovered
+              ? "0 0 40px rgba(255,255,255,0.9)"
+              : "none",
+
+            // Smooth transition between the two states
+            transition: "color 0.3s ease, text-shadow 0.3s ease",
+          }}
+        >
+          Harshita
         </h1>
 
-        {/* Green line under the name */}
-        <div className="h-0.5 w-full bg-green-400 mt-3" />
+        {/*
+          PROGRESS BAR
+          - absolute bottom-0 left-0 → pinned to bottom-left
+          - h-1 → 4px tall
+          - fillBar animation → grows from 0% to 100% in 1 second
+          - this visually shows how long the splash lasts
+        */}
+        <div
+          className="absolute bottom-0 left-0 h-1"
+          style={{
+            background: "#111",
+            animation: "fillBar 1s linear forwards",
+          }}
+        />
 
-        {/* Your role */}
-        <p className="text-green-400 text-sm tracking-widest mt-4 font-mono">
-          Software Developer
-        </p>
-
-        {/* Progress bar at the bottom
-            animates from 0% → 100% width in 3 seconds */}
-        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-900">
-          <div className="h-full bg-green-400 animate-[progress_3s_linear_forwards]" />
-        </div>
       </div>
-
-      {/* HOME PAGE
-          Fades in after splash disappears */}
-      <div className={`
-        min-h-screen flex flex-col items-center justify-center
-        bg-black transition-opacity duration-700
-        ${showSplash ? "opacity-0" : "opacity-100"}
-      `}>
-        <h1 className="text-white text-5xl font-bold font-mono">
-          Welcome to{" "}
-          <span className="text-green-400">Harshita's</span> Portfolio
-        </h1>
-        <p className="text-green-600 mt-4 font-mono text-sm">
-          // home page content goes here
-        </p>
-      </div>
-
-    </div>
+    </>
   );
 }
