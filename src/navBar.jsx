@@ -5,7 +5,6 @@ export default function Navbar() {
   const navLinks = ["Home", "About", "Skills", "Projects", "Contact"];
 
   return (
-    <>
     <nav
       className="flex justify-between items-center px-10 py-4 sticky top-0 z-50"
       style={{ background: "#111" }}
@@ -24,7 +23,7 @@ export default function Navbar() {
       <ul className="flex gap-8 list-none m-0 p-0">
         {navLinks.map((link) => (
           <li key={link}>
-            
+            <a
               href={"#" + link.toLowerCase()}
               style={{
                 fontSize: "0.8rem",
@@ -61,6 +60,5 @@ export default function Navbar() {
         Hire Me
       </button>
     </nav>
-    </>
   );
 }
