@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <nav
       className="flex justify-between items-center px-10 py-4 sticky top-0 z-50"
-      style={{ background: "#111" }}
+      style={{ background: "#698795" }}
     >
       <div
         style={{
@@ -36,6 +36,11 @@ export default function Navbar() {
               onClick={(e) => {
                 e.preventDefault();
                 setActiveLink(link);
+
+                const section = document.getElementById(link.toLowerCase());
+                if (section) {
+                  section.scrollIntoView({ behavior: "smooth" });
+                }
               }}
             >
               {link}
@@ -46,7 +51,7 @@ export default function Navbar() {
 
       <button
         style={{
-          background: "#e8000d",
+          background: "#68767b",
           color: "#fff",
           border: "none",
           padding: "0.45rem 1.3rem",

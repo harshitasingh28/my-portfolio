@@ -43,12 +43,10 @@ export default function Hero() {
 
   return (
     <section
+      id="home"
       className="flex items-end px-10 overflow-hidden"
-      style={{
-        background: "#e8000d",
-        minHeight: "88vh",
-      }}
-    >
+      style={{ background: "#698795", minHeight: "88vh" }}
+    > 
       {/* LEFT: Text content */}
       <div className="flex-1 pb-16 z-10">
 
@@ -156,29 +154,18 @@ export default function Hero() {
       {/* RIGHT: Your photo */}
       <div className="flex items-end justify-center" style={{ width: "380px" }}>
         {/* Replace this div with your actual photo later! */}
-        <div
-          style={{
-            width: "300px",
-            height: "380px",
-            background: "rgba(0,0,0,0.15)",
-            borderRadius: "8px 8px 0 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "2px dashed rgba(255,255,255,0.3)",
-            flexDirection: "column",
-            gap: "0.5rem",
-          }}
-        >
-          <span style={{ fontSize: "3rem" }}>🧑‍💻</span>
-          <span style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "0.75rem",
-            color: "rgba(255,255,255,0.5)",
-          }}>
-            Add your photo here
-          </span>
-        </div>
+        <img
+  src="/image.png"
+  alt="Harshita"
+  style={{
+    width: "380px",
+    height: "auto",
+    objectFit: "cover",
+    borderRadius: "12px 12px 0 0",
+    display: "block",
+  }}
+/>
+
       </div>
 
       {/* CSS for blinking cursor */}

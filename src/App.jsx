@@ -3,6 +3,7 @@ import SplashScreen from "./SplashScreen";
 import Navbar from "./navBar";
 import Hero from "./hero";
 import About from "./About";
+import Skills from "./skills";
 import Contact from "./Contact";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Navbar />
       <Hero />
       <About />
+      <Skills />
       <Contact />
 
       {showSplash && (
